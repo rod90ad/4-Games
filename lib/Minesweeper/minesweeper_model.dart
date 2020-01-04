@@ -7,6 +7,9 @@ class MineSweeperModel {
   int numberOfColumn;
   int numberAround;
   Color color;
+  Widget iconToShow;
+  bool flag = false;
+  bool clicked = false;
 
   String getNumberAround(){
     if(numberAround==0)
@@ -15,5 +18,5 @@ class MineSweeperModel {
       return "$numberAround";
   }
 
-  MineSweeperModel({this.bomb, this.numberAround, this.numberOfRow, this.numberOfColumn, this.color});
+  MineSweeperModel({this.bomb, this.numberAround, this.numberOfRow, this.numberOfColumn, this.color, this.iconToShow});
 }

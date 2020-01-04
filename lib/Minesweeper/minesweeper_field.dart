@@ -1,56 +1,70 @@
 import 'package:diamond_menu/Minesweeper/minesweeper_model.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'minesweeper.dart';
 
 class MineSweeperField extends StatefulWidget {
   
+  MineSweeperField(this.model, this.reference, Key key): super(key:key);
+
   final MineSweeperModel model;
-
-  MineSweeperField(this.model);
-
+  final Minesweeper reference;
+  
   @override
-  _MineSweeperFieldState createState() => _MineSweeperFieldState();
+  MineSweeperFieldState createState() => MineSweeperFieldState();
 }
 
-class _MineSweeperFieldState extends State<MineSweeperField> {
+class MineSweeperFieldState extends State<MineSweeperField> {
   
-  Widget iconToShow = Container();
-  Color myColor;
+  Future<void> onTap() async {
+    if(!widget.model.flag){
+      if(widget.model.bomb){
+        widget.model.iconToShow = Icon(MdiIcons.bomb, color: Colors.red);
+        if(!widget.reference.isGameOver){
+          widget.reference.isGameOver=true;
+          widget.reference.gameOver();
+        }
+        setState(() {});
+      }else{
+        if(!widget.model.clicked && !widget.reference.isGameOver){
+          widget.model.color = widget.model.color==Colors.green[500] ? Colors.brown[300] : Colors.brown[200];
+          widget.model.iconToShow = Center(
+            child: Text(widget.model.getNumberAround(), style: TextStyle(color: _getColorOfNumber(widget.model.numberAround), fontSize: 20, fontWeight: FontWeight.bold)),
+          );
+          if(widget.model.getNumberAround().isEmpty){
+            widget.reference.clickAround(widget.model.numberOfRow, widget.model.numberOfColumn);
+          }
+          widget.model.clicked = true;
+          widget.reference.verifyVictory();
+          if(this.mounted)
+            setState((){});
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    if(myColor==null)
-      myColor = widget.model.color;
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.all(0.2),
-        color: myColor,
-        child: iconToShow,
+        color: widget.model.color,
+        child: widget.model.iconToShow,
       ),
-      onTap: (){
-        print("Row: ${widget.model.numberOfRow} Column: ${widget.model.numberOfColumn}");
-        if(widget.model.bomb){
-          setState(() {
-            iconToShow = Icon(Icons.flag, color: Colors.red);
-          });
-        }else{
-          setState(() {
-            myColor = widget.model.color==Colors.green[500] ? Colors.brown[300] : Colors.brown[200];
-            iconToShow = Center(
-              child: Text(widget.model.getNumberAround(), style: TextStyle(color: _getColorOfNumber(), fontSize: 20, fontWeight: FontWeight.bold)),
-            );
-          });
-        }
-      },
+      onTap: onTap,
       onLongPress: (){
-        setState(() {
-          iconToShow = Icon(Icons.flag, color: Colors.red);
-        });
-      },
+          if(!widget.model.flag && !widget.model.clicked){
+            setState(() { widget.model.iconToShow = Icon(Icons.flag, color: Colors.red); });
+          }else if(!widget.model.clicked){
+            setState(() { widget.model.iconToShow = Container(); });
+          }
+          widget.model.flag = !widget.model.flag;
+        },
     );
   }
 
-  Color _getColorOfNumber(){
-    switch(widget.model.numberAround){
+  Color _getColorOfNumber(int numberAround){
+    switch(numberAround){
       case 1:
         return Colors.blue;
       case 2:
