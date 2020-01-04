@@ -15,9 +15,9 @@ class MineSweeperField extends StatefulWidget {
 }
 
 class MineSweeperFieldState extends State<MineSweeperField> {
-  
+
   Color myColor;
-  
+
   Future<void> onTap() async {
     if(!widget.model.flag){
       if(widget.model.bomb){
@@ -48,8 +48,6 @@ class MineSweeperFieldState extends State<MineSweeperField> {
 
   @override
   Widget build(BuildContext context) {
-    if(myColor==null)
-      myColor = widget.model.color;
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.all(0.2),
