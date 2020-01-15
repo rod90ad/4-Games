@@ -1,5 +1,5 @@
-import 'package:diamond_menu/Utils/block_open.dart';
 import 'package:flutter/material.dart';
+import 'package:four_games/Utils/block_open.dart';
 
 class DiamondLeft extends StatefulWidget {
   
@@ -51,7 +51,7 @@ class _DiamondLeftState extends State<DiamondLeft> {
             child: Scaffold(
               body: Stack(
                 children: <Widget>[
-                  Container(color: Colors.red),
+                  Container(color: Colors.brown),
                   Positioned(
                     top: 0,
                     left: 0,
@@ -59,11 +59,11 @@ class _DiamondLeftState extends State<DiamondLeft> {
                     child: Opacity(
                       opacity: widget.animationController.value,
                       child: AppBar(
-                        title: Text("Red", style: TextStyle(color: Colors.red)), 
+                        title: Text("Brown", style: TextStyle(color: Colors.brown)), 
                         centerTitle: true,
                         backgroundColor: Colors.white,
                         leading: IconButton(
-                          icon: Icon(Icons.arrow_back, color: Colors.red),
+                          icon: Icon(Icons.arrow_back, color: Colors.brown),
                           onPressed: () { 
                             if(widget.animationController.value==1.0)
                               turnToWindow();

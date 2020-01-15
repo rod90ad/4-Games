@@ -1,4 +1,4 @@
-package com.example.diamond_menu
+package com.rodso.four_games
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

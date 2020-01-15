@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.diamond_menu">
+    package="com.rodso.four_games">
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="4 Games"

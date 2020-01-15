@@ -1,8 +1,8 @@
-import 'package:diamond_menu/Diamonds/diamond_bottom.dart';
-import 'package:diamond_menu/Diamonds/diamond_left.dart';
-import 'package:diamond_menu/Diamonds/diamond_right.dart';
-import 'package:diamond_menu/Diamonds/diamond_top.dart';
 import 'package:flutter/material.dart';
+import 'Diamonds/diamond_bottom.dart';
+import 'Diamonds/diamond_left.dart';
+import 'Diamonds/diamond_right.dart';
+import 'Diamonds/diamond_top.dart';
 
 class DiamondMenu extends StatefulWidget {
   @override

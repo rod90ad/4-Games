@@ -1,6 +1,7 @@
-import 'package:diamond_menu/Minesweeper/minesweeper.dart';
-import 'package:diamond_menu/Utils/block_open.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:four_games/Minesweeper/minesweeper.dart';
+import 'package:four_games/Utils/block_open.dart';
 
 class DiamondRight extends StatefulWidget {
   
@@ -9,10 +10,10 @@ class DiamondRight extends StatefulWidget {
   DiamondRight(this.animationController);
   
   @override
-  _DiamondRightState createState() => _DiamondRightState();
+  DiamondRightState createState() => DiamondRightState();
 }
 
-class _DiamondRightState extends State<DiamondRight> {
+class DiamondRightState extends State<DiamondRight> {
   
   Animation offset;
   Animation rotation;
@@ -40,6 +41,15 @@ class _DiamondRightState extends State<DiamondRight> {
       widget.animationController.reverse();
       BlockOpen.getInstance().setBlocked(false);
     }
+  }
+
+  Future<bool> _renderTime() async {
+    await Future.delayed(Duration(milliseconds: 300));
+    return true;
+  }
+
+  void refresh(){
+    setState((){});
   }
 
   @override
@@ -84,15 +94,9 @@ class _DiamondRightState extends State<DiamondRight> {
                   ),
                   Opacity(
                     opacity: widget.animationController.value,
-                    child: novoJogo ? Minesweeper() : Container()
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: Opacity(
-                      opacity: widget.animationController.value,
-                      child: AppBar(
+                    child: Scaffold(
+                      backgroundColor: backgroundColor.value,
+                      appBar: AppBar(
                         title: Text("Minesweeper", style: TextStyle(color: Colors.green)), 
                         centerTitle: true,
                         backgroundColor: Colors.white,
@@ -103,25 +107,36 @@ class _DiamondRightState extends State<DiamondRight> {
                               turnToWindow();
                           },
                         ),
-                        actions: <Widget>[
-                          IconButton(
-                            onPressed: (){
-                              setState(() {
-                                novoJogo=true;
-                              });
+                      ),
+                      body: Column(
+                        children: <Widget>[
+                          FutureBuilder<bool>(
+                            future: _renderTime(),
+                            builder: (context, snapshot){
+                              if(snapshot.connectionState != ConnectionState.waiting){
+                                if(snapshot.data){
+                                  return Minesweeper(this);
+                                }else{
+                                  return Expanded(
+                                    child:Center(child: CircularProgressIndicator())
+                                  );
+                                }
+                              }else{
+                                return Expanded(
+                                  child:Center(child: CircularProgressIndicator())
+                                );
+                              }
                             },
-                            icon: Icon(Icons.new_releases, color: Colors.green),
                           )
                         ],
-                      ),
+                      )
                     ),
-                  )
+                  ),
                 ],
               )
             ),
           ),
           onTap: (){
-            print(BlockOpen.getInstance().isBlocked());
             if(widget.animationController.value==0.0 && !BlockOpen.getInstance().isBlocked())
               turnToWindow();
           },

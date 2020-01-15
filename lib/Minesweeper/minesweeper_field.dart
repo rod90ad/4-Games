@@ -1,14 +1,17 @@
-import 'package:diamond_menu/Minesweeper/minesweeper_model.dart';
 import 'package:flutter/material.dart';
+import 'package:four_games/Utils/timer.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'minesweeper.dart';
+import 'minesweeper_model.dart';
 
 class MineSweeperField extends StatefulWidget {
   
-  MineSweeperField(this.model, this.reference, Key key): super(key:key);
+  MineSweeperField(this.model, this.reference, Key key, this.timer, this.flags): super(key:key);
 
   final MineSweeperModel model;
   final Minesweeper reference;
+  final GlobalKey<TimerState> timer;
+  final GlobalKey<FlagsRemainingState> flags;
   
   @override
   MineSweeperFieldState createState() => MineSweeperFieldState();
@@ -37,6 +40,8 @@ class MineSweeperFieldState extends State<MineSweeperField> {
             widget.reference.clickAround(widget.model.numberOfRow, widget.model.numberOfColumn);
           }
           widget.model.clicked = true;
+          if(!this.widget.timer.currentState.running)
+            this.widget.timer.currentState.startTimer();
           widget.reference.verifyVictory();
           if(this.mounted)
             setState((){});
@@ -48,9 +53,10 @@ class MineSweeperFieldState extends State<MineSweeperField> {
 
   @override
   Widget build(BuildContext context) {
+    if(myColor==null)
+      myColor =  widget.model.color;
     return GestureDetector(
       child: Container(
-        margin: EdgeInsets.all(0.2),
         color: myColor,
         child: widget.model.iconToShow,
       ),
@@ -58,8 +64,10 @@ class MineSweeperFieldState extends State<MineSweeperField> {
       onLongPress: (){
           if(!widget.model.flag && !widget.model.clicked){
             setState(() { widget.model.iconToShow = Icon(Icons.flag, color: Colors.red); });
+            this.widget.flags.currentState.decrement();
           }else if(!widget.model.clicked){
             setState(() { widget.model.iconToShow = Container(); });
+            this.widget.flags.currentState.increment();
           }
           widget.model.flag = !widget.model.flag;
         },
